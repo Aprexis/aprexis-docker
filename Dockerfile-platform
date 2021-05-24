@@ -1,0 +1,23 @@
+FROM ruby:2.5.3
+RUN apt-get update -qq && \
+    apt-get install -y curl git build-essential libpq-dev nodejs libpq-dev postgresql-client openjdk-8-jdk \
+    --fix-missing \
+    --no-install-recommends
+RUN gem update bundler
+
+# Install some additional files
+WORKDIR /aprexis
+COPY wait-for-it.sh ./
+COPY setup-for-rails.sh ./
+
+# Disable IPV6
+RUN cp /etc/hosts /tmp/hosts.original
+RUN sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts
+
+WORKDIR /aprexis-platform-5
+COPY ./aprexis-platform-5/Gemfile .
+COPY ./aprexis-platform-5/Gemfile.lock .
+RUN bundle install
+
+# Install the application
+ADD ./aprexis-platform-5 /aprexis-platform-5

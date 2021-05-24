@@ -1,0 +1,69 @@
+version: '2.2'
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=
+    ports:
+      - "${APREXIS_POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+    ports:
+      - "${APREXIS_REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/var/lib/redis/data
+  
+  solr:
+    build:
+      context: .
+      dockerfile: Dockerfile-platform
+    image: aprexis/aprexis-platform-5:latest
+    ports:
+      - "${APREXIS_SOLR_PORT}:8983"
+    volumes:
+      - ./aprexis-platform-5:/aprexis-platform-5
+    command: bash -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && RAILS_ENV=development_docker bundle exec rails sunspot:solr:run"
+
+  platform:
+    image: aprexis/aprexis-platform-5:latest
+    links:
+      - postgres
+      - redis
+      - solr
+    volumes:
+      - ./aprexis-platform-5:/aprexis-platform-5
+    command: bash -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && RAILS_ENV=development_docker bundle exec puma -b tcp://0.0.0.0:3000"
+    ports:
+      - "${APREXIS_PLATFORM_PORT}:3000"
+
+  resque-worker:
+    image: aprexis/aprexis-platform-5:latest
+    links:
+      - postgres
+      - redis
+      - solr
+    volumes:
+      - ./aprexis-platform-5:/aprexis-platform-5
+    command: bash -c "/aprexis/setup-for-rails.sh; RAILS_ENV=development_docker bundle exec rails resque:work QUEUE=*"
+    ports: []
+
+  resque-scheduler:
+    image: aprexis/aprexis-platform-5:latest
+    links:
+      - postgres
+      - redis
+      - solr
+    volumes:
+      - ./aprexis-platform-5:/aprexis-platform-5
+    command: bash -c "/aprexis/setup-for-rails.sh; RAILS_ENV=development_docker bundle exec rails resque:scheduler"
+    ports: []
+
+volumes:
+  postgres_data:
+  redis_data:

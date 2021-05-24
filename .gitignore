@@ -1,0 +1,8 @@
+# Keep the folder 'aprexis-data', but ignore all of its contents except a marker file.
+aprexis-data/*
+!aprexis-data/.gitkeep
+
+# Ignore the code folders.
+aprexis-api/
+aprexis-api-ui/
+aprexis-platform-5/
