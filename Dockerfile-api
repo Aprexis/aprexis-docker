@@ -5,6 +5,12 @@ RUN apt-get update -qq && \
     --no-install-recommends
 RUN gem update bundler
 
+# Set up the shell RC file
+COPY export-root-env.sh /root
+RUN chmod +x /root/export-root-env.sh
+COPY .env /root/.env
+RUN echo "source /root/export-root-env.sh" >> /root/.bashrc
+
 # Install some additional files
 WORKDIR /aprexis
 COPY wait-for-it.sh ./

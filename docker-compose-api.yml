@@ -28,7 +28,7 @@ services:
       - "${APREXIS_SOLR_PORT}:8983"
     volumes:
       - ./aprexis-platform-5:/aprexis-platform-5
-    command: bash -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && RAILS_ENV=development_docker bundle exec rails sunspot:solr:run"
+    command: bash --login -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && bundle exec rails sunspot:solr:run"
 
   platform:
     image: aprexis/aprexis-platform-5:latest
@@ -38,7 +38,7 @@ services:
       - solr
     volumes:
       - ./aprexis-platform-5:/aprexis-platform-5
-    command: bash -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && RAILS_ENV=development_docker bundle exec puma -b tcp://0.0.0.0:3000"
+    command: bash --login -c "/aprexis/setup-for-platform.sh; rm -f tmp/pids/server.pid && bundle exec puma -b tcp://0.0.0.0:3000"
     ports:
       - "${APREXIS_PLATFORM_PORT}:3000"
 
@@ -53,7 +53,7 @@ services:
       - solr
     volumes:
       - ./aprexis-api:/aprexis-api
-    command: bash -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && RAILS_ENV=development_docker bundle exec puma -b tcp://0.0.0.0:3250"
+    command: bash --login -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && bundle exec puma -b tcp://0.0.0.0:3250"
     ports:
       - "${APREXIS_API_PORT}:3250"
 
@@ -70,7 +70,7 @@ services:
     volumes:
       - ./aprexis-api-ui:/app
     working_dir: /app
-    command: "bash -c 'yarn install; yarn start-docker'"
+    command: "bash --login -c 'yarn install; yarn start-docker'"
     depends_on:
       - api
 
@@ -82,7 +82,7 @@ services:
       - solr
     volumes:
       - ./aprexis-platform-5:/aprexis-platform-5
-    command: bash -c "/aprexis/setup-for-rails.sh; RAILS_ENV=development_docker bundle exec rails resque:work QUEUE=*"
+    command: bash --login -c "/aprexis/setup-for-platform.sh; bundle exec rails resque:work QUEUE=*"
     ports: []
 
   resque-scheduler:
@@ -93,7 +93,7 @@ services:
       - solr
     volumes:
       - ./aprexis-platform-5:/aprexis-platform-5
-    command: bash -c "/aprexis/setup-for-rails.sh; RAILS_ENV=development_docker bundle exec rails resque:scheduler"
+    command: bash --login -c "/aprexis/setup-for-platform.sh; bundle exec rails resque:scheduler"
     ports: []
 
 volumes:

@@ -1,14 +1,29 @@
 FROM ruby:2.5.3
 RUN apt-get update -qq && \
-    apt-get install -y curl git build-essential libpq-dev nodejs libpq-dev postgresql-client openjdk-8-jdk \
+    apt-get install -y curl \
+                       git \
+                       build-essential \
+                       libpq-dev \
+                       nodejs \
+                       libpq-dev \
+                       postgresql-client \
+                       openjdk-8-jdk \
+                       zip \
     --fix-missing \
     --no-install-recommends
 RUN gem update bundler
+
+# Set up the shell RC file
+COPY export-root-env.sh /root
+RUN chmod +x /root/export-root-env.sh
+COPY .env /root/.env
+RUN echo "source /root/export-root-env.sh" >> /root/.bashrc
 
 # Install some additional files
 WORKDIR /aprexis
 COPY wait-for-it.sh ./
 COPY setup-for-rails.sh ./
+COPY setup-for-platform.sh ./
 
 # Disable IPV6
 RUN cp /etc/hosts /tmp/hosts.original

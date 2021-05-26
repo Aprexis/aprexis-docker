@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Executes docker-compose to bring the system up.
+# Executes docker-compose to bring the system up in detached mode.
 
 # Parameters:
 #    $1                           the optional container to bring up. The default is all.
@@ -15,5 +15,4 @@
 
 APREXIS_DOCKER_COMPOSE_FILE=docker-compose-${APREXIS_VARIETY}.yml
 
-docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} up $1
-
+docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} up -d $1
