@@ -13,7 +13,7 @@ new_up: down build new_db up
 new_up: down build new_db upd
 
 # Bring up supporting containers.
-support: postgres solr
+support: postgres redis solr
 
 # Basic commands:
 

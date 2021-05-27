@@ -15,7 +15,7 @@ The variety is controlled by the environment variable APREXIS_VARIETY, which can
 - platform
 - api (the default)
 
-## Set up
+## Setup
 
 Getting the system set up is easier with docker than it is without, but it still requires some work. The various project repositories are not linked, so you will have to clone each of them independently. However, due to restrictions imposed by docker, you will need to clone the docker project first and then put the remaining projects under that.
 
@@ -120,3 +120,69 @@ You can stop the system by hitting ctrl-C. This will partially clean things up, 
 You can clean up any stranded containers by running:
 
 `make down`
+
+# Using the System
+
+Once the system has been built, you generally don't need to rebuild it unless you make changes to the docker setup. Unless you get new data or want to restart from a clean slate, you shouldn't need to create a new database even if you do rebuild the system.
+
+Both Rails and React are set up to pick up changes while running. The browser generally needs to be refreshed to cause it to load the new version, but you won't lose context when you do.
+
+## Running the system
+
+Starting and stopping the system after it has been built only requires the last two steps from the setup.
+
+To start:
+
+`make up` (runs in foreground, ctrl-C to stop)
+`make upd` (runs in background)
+
+To stop:
+
+`make down` (cleans up after ctrl-C in the foreground or to shutdown a background run)
+
+## Testing the system
+
+To run the platform and API tests, you can start a shell running on the appropriate container. The commands for doing these are:
+
+`make platform_shell` (to test the original Rails platform)
+`make api_shell` (to test the API)
+
+## Running the system in a hybrid fashion
+
+You can use docker to provide Postgres, Redis, and optionally SOLR. If you've done a build of the system, there are four useful Make commands available:
+
+1. `make postgres` - runs Postgres in a container, with its 5432 port mapped to the host.
+2. `make redis` - runs Redis in a container, with its 6379 port mapped to the host.
+3. `make solr` - runs SOLR in a container, with its 8983 port mapped to the host.
+4. `make support` - runs all three of the above. Actually, the `make solr` command effectively does this, so you could use that instead.
+
+SOLR is provided by the platform, so you need to do the build to run this. Postgres and Redis are simply standard docker images, so you could run these manually if you prefer.
+
+## Environment Variables
+
+The complete list of environment variables added to support docker is:
+
+`APREXIS_PLATFORM_PORT` - specifies the port used by the application. Default is 3000.
+
+`APREXIS_API_PORT` - specifies the port used by the API. Default is 3250.
+
+`APREXIS_API_UI_PORT` - specifieds the port used by the UI for the API. Default is 3500.
+
+
+`APREXIS_POSTGRES_HOST` - specifies the hostname of the Postgres database. Default is localhost.
+`APREXIS_POSTGRES_USERNAME` - specifies the username to use to log into the Postgres database. Default is the username for the user logged into the host.
+`APREXIS_POSTGRES_PORT` - specifies the host port used by the Postgres database. Changing this will allow you to run the docker Postgres database alongside one running on the host. Default is 5432.
+
+`APREXIS_REDIS_HOST` - specifies the hostname of the Redis database. Default is localhost.
+`APREXIS_REDIS_PORT` - specifies the host port used by the Redis database. Changing this will allow you to run the docker Redis database alongside one running on the host. Default is 6379.
+`APREXIS_REDIS_DEVELOPMENT_RESQUE_URL` - specifies the URL used to connect Resque to the development Redis database. The default is localhost:6379:0.
+`APREXIS_REDIS_TEST_RESQUE_URL` - specifies the URL used to connect Resque to the test Redis database. Default is localhost:6379:8.
+`APREXIS_REDIS_DEVELOPMENT_SESSION_URL` - specifies the URL used by the platform to store its HTTP session information in the development Redis database. Default is redis://localhost:6379/1.
+`APREXIS_REDIS_TEST_SESSION_URL` - specifies the URL used by the platform to store its HTTP session in the test Redis database. Default is redis://localhost:6379/2.
+
+`APREXIS_SOLR_HOST` - specifies the hostname of the SOLR search engine. Default is localhost.
+`APREXIS_SOLR_PORT` - specifies the host port of the SOLR search engine. Changing this will allow to run the docker SOLR alongside one running on the host. Default is 8983.
+
+To use the docker services, do not set these in the shell where you run docker. Just set them in the one that you want to run the application.
+
+The environment variable values for docker can be found in the `.env` file in the top-level folder of the docker project.
