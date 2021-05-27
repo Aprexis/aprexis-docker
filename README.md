@@ -52,6 +52,9 @@ In the **aprexis-docker** folder, use the following command to do the clone:
 
 `git clone git@github.com:Aprexis/aprexis-platform-5.git`
 
+NOTE: for now, the only branch of this project that works is the development branch, or branches off of that created
+      after May 27th, 2021.
+
 ### Clone the Aprexis API project
 
 In the **aprexis-docker** folder, use the following command to do the clone:
