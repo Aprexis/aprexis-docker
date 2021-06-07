@@ -10,7 +10,7 @@ APREXIS_VARIETY := api
 new_up: down build new_db up
 
 # Build new version of full system (API and platform) and launch in background.
-new_up: down build new_db upd
+new_upd: down build new_db upd
 
 # Bring up supporting containers.
 support: postgres redis solr
