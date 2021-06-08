@@ -14,7 +14,7 @@
 SHELL_DIR=`dirname "$0"`
 APREXIS_VARIETY=${APREXIS_VARIETY:-api}
 APREXIS_DOCKER_COMPOSE_FILE=docker-compose-${APREXIS_VARIETY}.yml
-data_file=$(find ./aprexis-data -type f ! -iname ".*" -printf '%T+ %p\n'  | sort -r | head -n 1 | cut -d' ' -f2)
+data_file=$(ls -t `find ./aprexis-data -type f ! -iname ".*"` | head -n 1 | cut -d' ' -f2)
 
 if [ $# -eq 0 ]; then
   ${SHELL_DIR}/start_db.sh
