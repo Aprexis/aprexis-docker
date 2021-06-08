@@ -12,12 +12,15 @@
 # Version: 1.0.0
 
 SHELL_DIR=`dirname "$0"`
+APREXIS_VARIETY=${APREXIS_VARIETY:-api}
 APREXIS_DOCKER_COMPOSE_FILE=docker-compose-${APREXIS_VARIETY}.yml
 
-${SHELL_DIR}/drop_db.sh
-${SHELL_DIR}/create_db.sh
-${SHELL_DIR}/load_data.sh
-${SHELL_DIR}/enable_users.sh
-${SHELL_DIR}/prepare_test_db.sh
+${SHELL_DIR}/start_db.sh
+
+${SHELL_DIR}/drop_db.sh --have-databases
+${SHELL_DIR}/create_db.sh --have-databases
+${SHELL_DIR}/load_data.sh --have-databases
+${SHELL_DIR}/enable_users.sh --have-databases
+${SHELL_DIR}/prepare_test_db.sh --have-databases
 
 ${SHELL_DIR}/down.sh

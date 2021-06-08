@@ -10,6 +10,7 @@
 # Since:   2021/05/21
 # Version: 1.0.0
 
+APREXIS_VARIETY=${APREXIS_VARIETY:-api}
 APREXIS_DOCKER_COMPOSE_FILE=docker-compose-${APREXIS_VARIETY}.yml
 
 docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} down --rmi all --volumes
