@@ -27,7 +27,7 @@ if [ "${data_file}" = "" ]; then
 else
   echo "Loading ${data_file}"
   if [[ "${data_file}" == *.gz ]]; then
-    zcat "${data_file}" | docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
+    gunzip -c "${data_file}" | docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
       run --no-deps --rm platform bash --login -c "/aprexis/setup-for-rails.sh; psql -h postgres -U postgres aprexis_development"
   else
     cat "${data_file}" | docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
