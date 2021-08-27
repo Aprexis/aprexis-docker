@@ -53,6 +53,7 @@ services:
       - solr
     volumes:
       - ./aprexis-api:/aprexis-api
+      - ./aprexis-platform-5/storage:/aprexis-api/storage
     command: bash --login -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && bundle exec puma -b tcp://0.0.0.0:3250"
     ports:
       - "${APREXIS_API_PORT}:3250"

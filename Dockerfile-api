@@ -27,3 +27,4 @@ RUN bundle install
 
 # Install the application
 ADD ./aprexis-api /aprexis-api
+ADD ./aprexis-platform-5/storage /aprexis-api/storage
