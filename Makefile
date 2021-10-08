@@ -41,6 +41,9 @@ index_db:
 load_data:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/load_data.sh
 
+migrate_db:
+	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/migrate_db.sh
+
 new_db:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/new_db.sh
 

@@ -34,9 +34,12 @@ else
       run --no-deps --rm platform bash --login -c "/aprexis/setup-for-rails.sh; psql -h postgres -U postgres aprexis_development"
   fi
 
+  echo "Ensuring that the name field has a value"
+  cat set_name_from_question_key.sql | docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
+      run --no-deps --rm platform bash --login -c "/aprexis/setup-for-rails.sh; psql -h postgres -U postgres aprexis_development"
+
   echo "Migrating to latest schema"
-  docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
-    run --no-deps --rm platform bash --login -c "/aprexis/setup-for-rails.sh; bundle exec rails db:migrate"
+  ${SHELL_DIR}/migrate_db.sh --have-databases
 fi
 
 if [ $# -eq 0 ]; then
