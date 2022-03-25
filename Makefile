@@ -65,6 +65,9 @@ platform_shell:
 api_shell:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/shell.sh api
 
+etl_shell:
+	${DIR}/export-env.sh; export APREXIS_VARIETY=etl; ${DIR}/shell.sh etl
+
 postgres:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/upd.sh postgres
 

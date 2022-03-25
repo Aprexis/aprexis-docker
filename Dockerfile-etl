@@ -1,0 +1,37 @@
+FROM ruby:2.5.3
+RUN apt-get update -qq && \
+  apt-get install -y curl \
+  git \
+  build-essential \
+  libpq-dev \
+  nodejs \
+  libpq-dev \
+  postgresql-client \
+  openjdk-8-jdk \
+  zip \
+  --fix-missing \
+  --no-install-recommends
+RUN gem update bundler
+
+# Set up the shell RC file
+COPY export-root-env.sh /root
+RUN chmod +x /root/export-root-env.sh
+COPY .env /root/.env
+RUN echo "source /root/export-root-env.sh" >> /root/.bashrc
+
+# Install some additional files
+WORKDIR /aprexis
+COPY wait-for-it.sh ./
+COPY setup-for-etl.sh ./
+
+# Disable IPV6
+RUN cp /etc/hosts /tmp/hosts.original
+RUN sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts
+
+WORKDIR /aprexis-etl
+COPY ./aprexis-etl/Gemfile .
+COPY ./aprexis-etl/Gemfile.lock .
+RUN bundle install
+
+# Install the application
+ADD ./aprexis-etl /aprexis-etl
