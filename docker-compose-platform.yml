@@ -18,7 +18,7 @@ services:
       - "${APREXIS_REDIS_PORT}:6379"
     volumes:
       - redis_data:/var/lib/redis/data
-  
+
   solr:
     build:
       context: .
