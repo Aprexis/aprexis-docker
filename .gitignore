@@ -6,5 +6,6 @@ aprexis-data/*
 aprexis-api/
 aprexis-api-ui/
 aprexis-etl/
+aprexispatientapp/
 aprexis-platform-5/
-aprexis_scripts
+aprexis_scripts/
