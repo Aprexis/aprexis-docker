@@ -9,3 +9,6 @@ aprexis-etl/
 aprexispatientapp/
 aprexis-platform-5/
 aprexis_scripts/
+
+# Ignore .vscode folder.
+.vscode/
