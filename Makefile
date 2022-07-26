@@ -76,3 +76,7 @@ redis:
 
 solr: redis
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/upd.sh solr
+
+stop_android:
+	adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
+	rm -f ~/.android/avd/*.avd/*.lock
