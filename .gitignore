@@ -5,6 +5,7 @@ aprexis-data/*
 # Ignore the code folders.
 aprexis-api/
 aprexis-api-ui/
+aprexis-api-utility/
 aprexis-etl/
 aprexispatientapp/
 AprexisPatientApp/
