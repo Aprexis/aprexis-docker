@@ -1,14 +1,9 @@
-FROM ruby:2.5.3
+FROM ruby:3.0.3
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9
+RUN echo "deb http://repos.azulsystems.com/debian stable main" | tee /etc/apt/sources.list.d/zulu.list
+RUN apt update
 RUN apt-get update -qq && \
-    apt-get install -y curl \
-    git \
-    build-essential \
-    libpq-dev \
-    nodejs \
-    libpq-dev \
-    postgresql-client \
-    openjdk-8-jdk \
-    zip \
+    apt-get install -y curl git build-essential libpq-dev nodejs libpq-dev postgresql-client zip zulu-8 \
     --fix-missing \
     --no-install-recommends
 RUN gem update bundler

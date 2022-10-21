@@ -16,5 +16,8 @@ AprexisPatientApp/
 aprexis-platform-5/
 aprexis_scripts/
 
+# Ignore the copied .ssh folder.
+.ssh/
+
 # Ignore .vscode folder.
 .vscode/
