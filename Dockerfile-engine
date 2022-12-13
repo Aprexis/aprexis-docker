@@ -1,0 +1,35 @@
+FROM ruby:3.0.3
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9
+RUN echo "deb http://repos.azulsystems.com/debian stable main" | tee /etc/apt/sources.list.d/zulu.list
+RUN apt update
+RUN apt-get update -qq && \
+  apt-get install -y curl git build-essential libpq-dev nodejs libpq-dev postgresql-client zip zulu-8 \
+  --fix-missing \
+  --no-install-recommends
+RUN gem update bundler
+
+# Set up the shell RC file
+COPY export-root-env.sh /root
+RUN chmod +x /root/export-root-env.sh
+COPY .env /root/.env
+RUN echo "source /root/export-root-env.sh" >> /root/.bashrc
+
+# Install some additional files
+WORKDIR /aprexis
+COPY wait-for-it.sh ./
+COPY setup-for-etl.sh ./
+
+# Disable IPV6
+RUN cp /etc/hosts /tmp/hosts.original
+RUN sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts
+
+WORKDIR /aprexis-engine
+RUN mkdir -p /aprexis-engine/lib/aprexis/engine
+COPY ./aprexis-engine/lib/aprexis/engine/version.rb /aprexis-engine/lib/aprexis/engine
+COPY ./aprexis-engine/Gemfile .
+COPY ./aprexis-engine/aprexis-engine.gemspec .
+COPY ./aprexis-engine/Gemfile.lock .
+RUN bundle install
+
+# Install the application
+ADD ./aprexis-engine /aprexis-engine
