@@ -20,6 +20,10 @@ COPY wait-for-it.sh ./
 COPY setup-for-rails.sh ./
 COPY setup-for-platform.sh ./
 
+# Install aprexis-engine
+WORKDIR /aprexis-engine
+ADD ./aprexis-engine /aprexis-engine
+
 # Disable IPV6
 RUN cp /etc/hosts /tmp/hosts.original
 RUN sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts
