@@ -17,7 +17,7 @@ RUN echo "source /root/export-root-env.sh" >> /root/.bashrc
 # Install some additional files
 WORKDIR /aprexis
 COPY wait-for-it.sh ./
-COPY setup-for-etl.sh ./
+COPY setup-for-rails.sh ./
 
 # Disable IPV6
 RUN cp /etc/hosts /tmp/hosts.original

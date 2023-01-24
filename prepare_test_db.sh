@@ -20,7 +20,7 @@ fi
 
 echo "Set up test database"
 docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
-  run --no-deps --rm engine bash --login -c "/aprexis/setup-for-rails.sh; bundle exec rails db:test:prepare"
+  run --no-deps --rm platform bash --login -c "/aprexis/setup-for-rails.sh; bundle exec rails db:test:prepare"
 
 if [ $# -eq 0 ]; then
   ${SHELL_DIR}/stop_db.sh
