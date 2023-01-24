@@ -21,3 +21,6 @@ aprexis_scripts/
 
 # Ignore .vscode folder.
 .vscode/
+
+# Ignore bundler configuration.
+.bundle/config
