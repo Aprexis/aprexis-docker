@@ -21,3 +21,6 @@ aprexis_scripts/
 
 # Ignore bundler configuration.
 .bundle
+
+# Ignore .env file.
+.env
