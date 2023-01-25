@@ -17,8 +17,8 @@ COPY wait-for-it.sh ./
 COPY setup-for-rails.sh ./
 
 # Install aprexis-engine (uncomment if using local repository)
-#WORKDIR /aprexis-engine
-#ADD ./aprexis-engine /aprexis-engine
+WORKDIR /aprexis-engine
+ADD ./aprexis-engine /aprexis-engine
 
 # Disable IPV6
 RUN cp /etc/hosts /tmp/hosts.original
