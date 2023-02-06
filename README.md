@@ -23,53 +23,146 @@ Here are the steps:
 
 1. Clone the Aprexis docker project
 2. Enter the Aprexis docker project
-3. Clone the Aprexis platform (Rails 5) project
-4. Clone the Aprexis API project
-5. Clone the Aprexis API UI project
-6. Download the anonymized Aprexis data
-7. Build the desired variety
-8. Build the database
-9. Launch the Aprexis system
-10. Shutdown docker when done
+3. Clone the Aprexis engine project
+4. Clone the Aprexis platform (Rails 5) project
+5. Clone the Aprexis API project
+6. Clone the Aprexis API UI project
+7. Set up the environment and configuration
+8. Download the anonymized Aprexis data
+9. Build the desired variety
+10. Build the database
+11. Launch the Aprexis system
+12. Shutdown docker when done
 
-The application, API, the UI for API are all set up to automatically load changes (although you will need to refresh the browser to get the UI changes into a running tab). If you are wish to restart, you can generally use just steps 2, 9, and 10.
+The application, API, the UI for API are all set up to automatically load changes (although you will need to refresh the browser to get the UI changes into a running tab).
 
 ### Clone the Aprexis docker project
 
 Use the following command to do the clone:
 
-`git clone git@github.com:Aprexis/aprexis-docker.git`
+```bash
+git clone git@github.com:Aprexis/aprexis-docker.git
+```
 
 ### Enter the Aprexis docker project
 
-`cd aprexis-docker`
+```bash
+cd aprexis-docker
+```
 
 All of the remaining steps should be performed in the **aprexis-docker** folder.
+
+### Clone the Aprexis engine project
+
+In the **aprexis-docker** folder, use the following command to do the clone:
+
+```bash
+git clone git@github.com:Aprexis/aprexis-engine.git
+```
 
 ### Clone the Aprexis platform (Rails 5) project
 
 In the **aprexis-docker** folder, use the following command to do the clone:
 
-`git clone git@github.com:Aprexis/aprexis-platform-5.git`
-
-NOTE: for now, the only branch of this project that works is the development branch, or branches off of that created
-      after May 27th, 2021.
+```bash
+git clone git@github.com:Aprexis/aprexis-platform-5.git
+```
 
 ### Clone the Aprexis API project
 
 In the **aprexis-docker** folder, use the following command to do the clone:
 
-`git clone git@github.com:Aprexis/aprexis-api.git`
-
-This project is only required if you want to use or work on the API. If you are going to be running the basic platform, you cna omit this step.
+```bash
+git clone git@github.com:Aprexis/aprexis-api.git
+```
 
 ### Clone the Aprexis API UI project
 
 In the **aprexis-docker** folder, use the following command to do the clone:
 
-`git clone git@github.com:Aprexis/aprexis-api-ui.git`
+```bash
+git clone git@github.com:Aprexis/aprexis-api-ui.git
+```
 
-This project is only required if you want to use or work on the API. If you are going to be running the basic platform, you can omit this step.
+### Set up the environment and configuration
+
+There are two parts to this:
+
+1. Create an **.env** file
+2. Configure access to the Aprexis engine
+
+#### Create an **.env** file
+
+In the **aprexis-docker** folder, create a file named **.env** to set up the docker environment. You can start from the file called **env.example**.
+
+See the section on environment variables for a full list.
+#### Configure access to the Aprexis engine
+
+The Aprexis engine is a Ruby gem project that is installed by the platform and API Gemfiles. There are two ways that the gem can be used:
+
+1. Installing from Github
+2. Installing from the local source
+
+Staging and production will always install from Github. Developers can either use Github or local source. However, even if you are planning to use the local source, you should configure access to the Github installation
+and maintain that access as described below.
+
+##### Installing from Github
+
+The Aprexis engine is a private repository on Github, which allows us to control access to the source and installed gem. To install from Github, you will need what is called a 'fine-grained access token'. These are secret
+keys used to allow access to Github without a password. They expire after a configurable period, so you will have to occasionally create a new one and update your configuration.
+
+To create an fine-grained access token, follow the instructions in https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token.
+
+Use these values:
+- **Name**: enter a value that will let you know what the access token is for. Example: Aprexis engine
+- **Expiration**: select or enter a time period or specific date after which the token will expire. Example: Custom - 01/01/2024 (or whatever next year is)
+- **Resource owner**: Aprexis
+- **Repository access**: Only select repositories
+- **Selected repositories**: aprexis-engine
+- **Permissions**: select what permissions the token should grant. By default, you should have read access, but you might also want to enable read access to the Github workflows.
+
+Once you click on Generate token, the access token will be created and presented to you. Make sure you do the steps below before you navigate away from the presentation page. There is no way on Github to recover the token
+after you leave the page. You will have to generate a new one.
+
+Add the following line to **.bashrc** or a similar file that is executed when you login:
+
+```bash
+export APREXIS_ENGINE_TOKEN=<your fine-grained access token>
+```
+
+Set the **APREXIS_USERNAME** and **APREXIS_ENGINE_TOKEN** in the **.env** file. These values are used to install the gem in the docker containers.
+
+- **APREXIS_USERNAME**: your Github username.
+- **APREXIS_ENGINE_TOKEN**: your fine-grained access token.
+
+If you use the Ruby bundler on the host, run the following command in the **aprexis-platform** and **aprexis-api** folders (this is also documented in those projects):
+
+```bash
+bundle config --local GITHUB__COM x-access-token:$APREXIS_ENGINE_TOKEN
+```
+
+The command depends on the value set in your **.bashrc** or similar shell set up file. If you change that value (as after creating a new token when the old one expires), you will need to run this command again.
+
+The platform and API project **Gemfile** files will need to be set up to pull the engine gem from Github. The line that specifies the gem should look like:
+
+```ruby
+gem 'aprexis-engine', git: 'https://github.com/Aprexis/aprexis-engine.git', branch: <branch name>, tag: <release tag>
+```
+
+The branch will be one of:
+- **master**: for official releases, used for production deployments.
+- **development**: for alpha releases, used for staging deployments.
+- <feature branch>: for development feature pre-releases.
+
+The release tag will be whatever tagged release version you want to use.
+
+#### Installing from the local source
+
+To install from the local source, as when you are working on the engine itself, change the line that specifies the gem in the **Gemfile** in the platform and API projects to look like:
+
+```bash
+gem 'aprexis-engine', path: '../aprexis-engine'
+```
 
 ### Download the anonymized Aprexis data
 
@@ -77,7 +170,7 @@ To really be able to run the system, you will need this data. In theory, you cou
 
 The data is kept on Amazon S3. You are supposed to be able to run the following commands to pull it down:
 
-```
+```bash
 cd aprexis-data
 wget https://aprexis-test-data.s3-us-west-2.amazonaws.com/<latest anonymized data>.sql.gz
 cd ..
@@ -91,7 +184,9 @@ You do not need to unzip this file after downloading it.
 
 After setting APREXIS_VARIETY (or leaving it unset to use the default), build the project by running:
 
-`make build`
+```bash
+make build
+```
 
 This will take a while as it will need to download docker images. Make sure it completes successfully before trying any of the other steps.
 
@@ -99,7 +194,9 @@ This will take a while as it will need to download docker images. Make sure it c
 
 You can build a new, clean copy of the database using the following command:
 
-`make new_db`
+```bash
+make new_db
+```
 
 If you don't have an existing database, you may see some errors. If you haven't downloaded the anonymized data, then this will simply build the database and create the table schema within it. That won't take too long. If, however, you do have the anonymized data, the full process will take quite a while and will produce quite a bit of output. This step does the following:
 
@@ -114,7 +211,9 @@ If you don't have an existing database, you may see some errors. If you haven't 
 
 All of the containers for the current variety can be started using the command:
 
-`make up`
+```bash
+make up
+```
 
 You can stop the system by hitting ctrl-C. This will partially clean things up, but it is best to do the next step to ensure that all of the containers are down.
 
@@ -122,7 +221,9 @@ You can stop the system by hitting ctrl-C. This will partially clean things up, 
 
 You can clean up any stranded containers by running:
 
-`make down`
+```bash
+make down
+```
 
 # Using the System
 
@@ -136,19 +237,25 @@ Starting and stopping the system after it has been built only requires the last 
 
 To start:
 
-`make up` (runs in foreground, ctrl-C to stop)
-`make upd` (runs in background)
+```bash
+make up # (runs in foreground, ctrl-C to stop)
+make upd # (runs in background)
+```
 
 To stop:
 
-`make down` (cleans up after ctrl-C in the foreground or to shutdown a background run)
+```bash
+make down # (cleans up after ctrl-C in the foreground or to shutdown a background run)
+```
 
 ## Testing the system
 
 To run the platform and API tests, you can start a shell running on the appropriate container. The commands for doing these are:
 
-`make platform_shell` (to test the original Rails platform)
-`make api_shell` (to test the API)
+```bash
+make platform_shell # (to test the original Rails platform)
+make api_shell # (to test the API)
+```
 
 ## Running the system in a hybrid fashion
 
@@ -165,27 +272,25 @@ SOLR is provided by the platform, so you need to do the build to run this. Postg
 
 The complete list of environment variables added to support docker is:
 
-`APREXIS_PLATFORM_PORT` - specifies the port used by the application. Default is 3000.
+**APREXIS_PLATFORM_PORT** - specifies the port used by the application. Default is 3000.
 
-`APREXIS_API_PORT` - specifies the port used by the API. Default is 3250.
+**APREXIS_API_PORT** - specifies the port used by the API. Default is 3250.
 
-`APREXIS_API_UI_PORT` - specifieds the port used by the UI for the API. Default is 3500.
+**APREXIS_API_UI_PORT** - specifieds the port used by the UI for the API. Default is 3500.
 
+**APREXIS_POSTGRES_HOST** - specifies the hostname of the Postgres database. Default is localhost.
+**APREXIS_POSTGRES_USERNAME** - specifies the username to use to log into the Postgres database. Default is the username for the user logged into the host.
+**APREXIS_POSTGRES_PORT** - specifies the host port used by the Postgres database. Changing this will allow you to run the docker Postgres database alongside one running on the host. Default is 5432.
 
-`APREXIS_POSTGRES_HOST` - specifies the hostname of the Postgres database. Default is localhost.
-`APREXIS_POSTGRES_USERNAME` - specifies the username to use to log into the Postgres database. Default is the username for the user logged into the host.
-`APREXIS_POSTGRES_PORT` - specifies the host port used by the Postgres database. Changing this will allow you to run the docker Postgres database alongside one running on the host. Default is 5432.
+**APREXIS_REDIS_HOST** - specifies the hostname of the Redis database. Default is localhost.
+**APREXIS_REDIS_PORT** - specifies the host port used by the Redis database. Changing this will allow you to run the docker Redis database alongside one running on the host. Default is 6379.
+**APREXIS_REDIS_DEVELOPMENT_RESQUE_URL** - specifies the URL used to connect Resque to the development Redis database. The default is localhost:6379:0.
+**APREXIS_REDIS_TEST_RESQUE_URL** - specifies the URL used to connect Resque to the test Redis database. Default is localhost:6379:8.
+**APREXIS_REDIS_DEVELOPMENT_SESSION_URL** - specifies the URL used by the platform to store its HTTP session information in the development Redis database. Default is redis://localhost:6379/1.
+**APREXIS_REDIS_TEST_SESSION_URL** - specifies the URL used by the platform to store its HTTP session in the test Redis database. Default is redis://localhost:6379/2.
 
-`APREXIS_REDIS_HOST` - specifies the hostname of the Redis database. Default is localhost.
-`APREXIS_REDIS_PORT` - specifies the host port used by the Redis database. Changing this will allow you to run the docker Redis database alongside one running on the host. Default is 6379.
-`APREXIS_REDIS_DEVELOPMENT_RESQUE_URL` - specifies the URL used to connect Resque to the development Redis database. The default is localhost:6379:0.
-`APREXIS_REDIS_TEST_RESQUE_URL` - specifies the URL used to connect Resque to the test Redis database. Default is localhost:6379:8.
-`APREXIS_REDIS_DEVELOPMENT_SESSION_URL` - specifies the URL used by the platform to store its HTTP session information in the development Redis database. Default is redis://localhost:6379/1.
-`APREXIS_REDIS_TEST_SESSION_URL` - specifies the URL used by the platform to store its HTTP session in the test Redis database. Default is redis://localhost:6379/2.
+**APREXIS_SOLR_HOST** - specifies the hostname of the SOLR search engine. Default is localhost.
+**APREXIS_SOLR_PORT** - specifies the host port of the SOLR search engine. Changing this will allow to run the docker SOLR alongside one running on the host. Default is 8983.
 
-`APREXIS_SOLR_HOST` - specifies the hostname of the SOLR search engine. Default is localhost.
-`APREXIS_SOLR_PORT` - specifies the host port of the SOLR search engine. Changing this will allow to run the docker SOLR alongside one running on the host. Default is 8983.
-
-To use the docker services, do not set these in the shell where you run docker. Just set them in the one that you want to run the application.
-
-The environment variable values for docker can be found in the `.env` file in the top-level folder of the docker project.
+**APREXIS_USERNAME** - specifies the Github username to use to get the Aprexis engine releases
+**APREXIS_ENGINE_TOKEN** - specifies the Github fine-grained access token to use to get the Aprexis engne releases

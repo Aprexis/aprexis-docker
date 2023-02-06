@@ -10,27 +10,22 @@ RUN apt-get update -qq && \
   openjdk-8-jdk \
   zip \
   --fix-missing \
-  --no-install-recommends
-RUN gem update bundler
+  --no-install-recommends && \
+  gem update bundler
 
 # Set up the shell RC file
-COPY export-root-env.sh /root
-RUN chmod +x /root/export-root-env.sh
-COPY .env /root/.env
-RUN echo "source /root/export-root-env.sh" >> /root/.bashrc
+COPY export-root-env.sh .env /root/
+RUN chmod +x /root/export-root-env.sh && echo "source /root/export-root-env.sh" >> /root/.bashrc
 
 # Install some additional files
 WORKDIR /aprexis
-COPY wait-for-it.sh ./
-COPY setup-for-etl.sh ./
+COPY wait-for-it.sh setup-for-etl.sh ./
 
 # Disable IPV6
-RUN cp /etc/hosts /tmp/hosts.original
-RUN sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts
+RUN cp /etc/hosts /tmp/hosts.original && sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts
 
 WORKDIR /aprexis-etl
-COPY ./aprexis-etl/Gemfile .
-COPY ./aprexis-etl/Gemfile.lock .
+COPY ./aprexis-etl/Gemfile ./aprexis-etl/Gemfile.lock ./
 RUN bundle install
 
 # Install the application

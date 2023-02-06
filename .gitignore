@@ -2,9 +2,6 @@
 aprexis-data/*
 !aprexis-data/.gitkeep
 
-# Ignore copied .ssh folder
-.ssh/
-
 # Ignore the code folders.
 aprexis-api/
 aprexis-api-ui/
@@ -16,5 +13,14 @@ AprexisPatientApp/
 aprexis-platform-5/
 aprexis_scripts/
 
+# Ignore the copied .ssh folder.
+.ssh/
+
 # Ignore .vscode folder.
 .vscode/
+
+# Ignore bundler configuration.
+.bundle
+
+# Ignore .env file.
+.env
