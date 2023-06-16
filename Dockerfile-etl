@@ -17,7 +17,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361
 
 # Set up the shell RC file
 COPY export-root-env.sh .env /root/
-RUN chmod +x /root/export-root-env.sh && echo "source /root/export-root-env.sh" >> /root/.bashrc
+RUN chmod +x /root/export-root-env.sh && echo "source /root/export-root-env.sh" >> /root/.bashrc && echo "export SCRIPT_ENV=development" >> /root/.bashrc
 
 # Install some additional files
 WORKDIR /aprexis
