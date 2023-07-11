@@ -20,8 +20,17 @@ support: postgres redis solr
 build:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/build.sh
 
+build_api:
+	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/build.sh
+
 build_engine:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/build.sh
+
+build_etl:
+  ${DIR}/export-env.sh; export APREXIS_VARIETY=etl; ${DIR}/build.sh
+
+build_platform:
+  ${DIR}/export-env.sh; export APREXIS_VARIETY=platform; ${DIR}/build.sh
 
 clean_docker:
 	export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/clean_docker.sh
