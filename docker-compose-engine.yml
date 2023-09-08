@@ -19,17 +19,6 @@ services:
     volumes:
       - redis_data:/var/lib/redis/data
 
-  solr:
-    build:
-      context: .
-      dockerfile: Dockerfile-platform
-    image: aprexis/aprexis-platform-5:latest
-    ports:
-      - "${APREXIS_SOLR_PORT}:8983"
-    volumes:
-      - ./aprexis-platform-5:/aprexis-platform-5
-    command: bash --login -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && bundle exec rails sunspot:solr:run"
-
   engine:
     build:
       context: .
@@ -38,7 +27,6 @@ services:
     links:
       - postgres
       - redis
-      - solr
     volumes:
       - ./aprexis-engine:/aprexis-engine
     command: bash

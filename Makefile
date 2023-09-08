@@ -13,7 +13,7 @@ new_up: down build new_db up
 new_upd: down build new_db upd
 
 # Bring up supporting containers.
-support: postgres redis solr
+support: postgres redis
 
 # Basic commands:
 
@@ -49,9 +49,6 @@ enable_users:
 
 force_build:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/force_build.sh
-
-index_db:
-	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/index_db.sh
 
 load_data:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/load_data.sh
@@ -92,8 +89,6 @@ postgres:
 redis:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/upd.sh redis
 
-solr: redis
-	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/upd.sh solr
 
 stop_android:
 	adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
