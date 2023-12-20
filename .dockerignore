@@ -1,8 +1,10 @@
 .git
 */.git
+aprexis-api-ui
+aprexis-api-utility
 aprexis-data
-aprexis-scripts
-aprexispatientapp
+aprexis_scripts
+AprexisPatientApp
 */tmp
 */log
 */private
