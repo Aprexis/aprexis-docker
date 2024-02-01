@@ -29,6 +29,7 @@ services:
       - redis
     volumes:
       - ./aprexis-platform-5:/aprexis-platform-5
+      - ./aprexis-data:/aprexis-data
     command: bash --login -c "/aprexis/setup-for-platform.sh; rm -f tmp/pids/server.pid && bundle exec puma -b tcp://0.0.0.0:3000"
     ports:
       - "${APREXIS_PLATFORM_PORT}:3000"
