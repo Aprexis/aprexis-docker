@@ -36,31 +36,31 @@ clean_docker:
 	export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/clean_docker.sh
 
 create_db:
-	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/create_db.sh
+	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/create_db.sh
 
 down:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/down.sh
 
 drop_db:
-	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/drop_db.sh
+	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/drop_db.sh
 
 enable_users:
-	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/enable_users.sh
+	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/enable_users.sh
 
 force_build:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/force_build.sh
 
 load_data:
-	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/load_data.sh
+	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/load_data.sh
 
 migrate_db:
-	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/migrate_db.sh
+	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/migrate_db.sh
 
 new_db:
-	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/new_db.sh
+	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/new_db.sh
 
 prepare_test_db:
-	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/prepare_test_db.sh
+	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/prepare_test_db.sh
 
 prune:
 	docker system prune
