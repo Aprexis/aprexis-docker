@@ -56,6 +56,9 @@ load_data:
 migrate_db:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/migrate_db.sh
 
+rollback_db:
+  ${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/rollback_db.sh
+
 new_db:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/new_db.sh
 
