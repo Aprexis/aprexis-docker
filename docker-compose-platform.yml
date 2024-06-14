@@ -34,6 +34,8 @@ services:
     command: bash --login -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && bundle exec puma -b tcp://0.0.0.0:3000"
     ports:
       - "${APREXIS_PLATFORM_PORT}:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   resque-worker:
     image: aprexis/aprexis-platform-5:latest
@@ -44,6 +46,8 @@ services:
       - ./aprexis-platform-5:/aprexis-platform-5
     command: bash --login -c "/aprexis/setup-for-rails.sh; bundle exec rails resque:work QUEUE=*"
     ports: []
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   resque-scheduler:
     image: aprexis/aprexis-platform-5:latest
@@ -54,6 +58,8 @@ services:
       - ./aprexis-platform-5:/aprexis-platform-5
     command: bash --login -c "/aprexis/setup-for-rails.sh; bundle exec rails resque:scheduler"
     ports: []
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 volumes:
   postgres_data:

@@ -272,6 +272,8 @@ SOLR is provided by the platform, so you need to do the build to run this. Postg
 
 The complete list of environment variables added to support docker is:
 
+**APREXIS_HOST_IP**- specifies the IP address to access the host machine when running in docker. Default is 172.17.0.1.
+
 **APREXIS_PLATFORM_PORT** - specifies the port used by the application. Default is 3000.
 
 **APREXIS_API_PORT** - specifies the port used by the API. Default is 3250.
