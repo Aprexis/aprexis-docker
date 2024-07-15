@@ -24,10 +24,10 @@ RUN apt-get update && apt-get install gnupg wget -y && \
 COPY .env export-root-env.sh /root/
 RUN chmod +x /root/export-root-env.sh && echo "source /root/export-root-env.sh" >> /root/.bashrc && echo "export OPENSSL_CONF=/etc/ssl/" >> /root/.bashrc
 
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true \
-	PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
-ENV XDG_CONFIG_HOME=/tmp/.chromium
-ENV XDG_CACHE_HOME=/tmp/.chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
+# ENV XDG_CONFIG_HOME=/tmp/.chromium
+# ENV XDG_CACHE_HOME=/tmp/.chromium
 
 COPY ./aprexis-platform-5/package.json ./
 
