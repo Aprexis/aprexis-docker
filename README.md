@@ -2,6 +2,69 @@
 
 This project allows a user or developer to run the Aprexis system locally using docker. It requires a working docker installation.
 
+
+## Quick Start
+
+Short version of the setup steps. A more detailed version, with background info and options, is below.
+
+#### 1. Clone the repositories
+
+In the root dir of your checkout of this repo
+```
+git clone git@github.com:Aprexis/aprexis-engine.git
+git clone git@github.com:Aprexis/aprexis-platform-5.git
+git clone git@github.com:Aprexis/aprexis-api.git
+git clone git@github.com:Aprexis/aprexis-api-ui.git
+cp env.example .env
+```
+#### 2. Create Github access token
+
+Create a fine-grained access token that has access to all Aprexis repositories. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+
+#### 3. Update .env
+
+Update the `.env` file.
+- Set the `APREXIS_USERNAME` to your github username that owns the access token just created.
+- Set `APREXIS_ENGINE_TOKEN` to the to token.
+
+Then:
+```
+source .env
+```
+
+#### 4. Get a database dump
+
+Get a `.gz` database dump from S3 or Google drive. It will be named something like `aprexis_anonymized_YYYY-MM-DD.sql.gz`. Put it in the `aprexis-data` dir.
+
+#### 5. Modify Gemfiles for local development
+
+Edit theses two files:
+
+```
+aprexis-api/Gemfile
+aprexis-platform-5/Gemfile
+```
+
+Set the `aprexis-engine` gem line in both files to this:
+ ```
+ gem 'aprexis-engine', path: '../aprexis-engine'
+ ```
+
+#### 6. Build and run the project
+
+```bash
+make build
+make new_db
+make up
+```
+
+#### 7. Go to the apps
+
+- Platform: http://localhost:3000
+- API UI:  http://localhost:3500
+- API:  http://localhost:3250
+
+
 ## Varieties
 
 There are two setups for running the Aprexis system:
