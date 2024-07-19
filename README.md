@@ -5,6 +5,8 @@ This project allows a user or developer to run the Aprexis system locally using 
 
 ## Quick Start
 
+Short version of the setup steps. A more detailed version, with background info and options, is below.
+
 #### 1. Clone the repositories
 
 In the root dir of your checkout of this repo
