@@ -320,6 +320,16 @@ make platform_shell # (to test the original Rails platform)
 make api_shell # (to test the API)
 ```
 
+## Pull all latest code
+
+Issues a `git pull` on all of the aprexis-* repositories used by docker-compose. This will pull whatever branch is currently checked out locally for each repository.
+
+If the branch has local changes, those changes are stashed to avoid potential conflicts. Any stashed changes will need to be unstashed manually.
+
+```bash
+make git_pull
+```
+
 ## Running the system in a hybrid fashion
 
 You can use docker to provide Postgres, Redis, and optionally SOLR. If you've done a build of the system, there are four useful Make commands available:
