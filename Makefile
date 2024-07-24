@@ -92,6 +92,9 @@ postgres:
 redis:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/upd.sh redis
 
+git_pull:
+	${DIR}/export-env.sh; export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/git_pull.sh
+
 
 stop_android:
 	adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
