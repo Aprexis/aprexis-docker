@@ -324,7 +324,7 @@ make api_shell # (to test the API)
 
 Issues a `git pull` on all of the aprexis-* repositories used by docker-compose. This will pull whatever branch is currently checked out locally for each repository.
 
-If the the branch has local changes, those changes are stashed to avoid potential conflicts. Any stashed changes will need to be unstashed manually.
+If the branch has local changes, those changes are stashed to avoid potential conflicts. Any stashed changes will need to be unstashed manually.
 
 ```bash
 make git_pull
