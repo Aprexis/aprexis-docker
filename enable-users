@@ -1,2 +1,6 @@
 User.update_all(expired_at: nil, last_sign_in_at: Time.now, last_activity_at: Time.now)
-User.all.each {|user| user.update_attribute(:password, 'Passw0rd!')}
+User.find_each do |user|
+  user.password = 'Passw0rd!'
+  user.password_confirmation = 'Passw0rd!'
+  user.save(validate: false)
+end
