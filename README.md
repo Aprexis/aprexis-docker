@@ -52,9 +52,21 @@ Set the `aprexis-engine` gem line in both files to this:
 
 #### 6. Build and run the project
 
+To build it from the new-style anonymized data, run:
+
 ```bash
+make build_engine
+make load_anonymized_db
 make build
+make up
+```
+
+To build it from the old-style full database dump anonymized data, run:
+
+```bash
+make build_engine
 make new_db
+make build
 make up
 ```
 

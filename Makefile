@@ -62,6 +62,9 @@ rollback_db:
 new_db:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/new_db.sh
 
+load_anonymized_db:
+	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/load_anonymized_db.sh
+
 prepare_test_db:
 	${DIR}/export-env.sh; export APREXIS_VARIETY=engine; ${DIR}/prepare_test_db.sh
 
