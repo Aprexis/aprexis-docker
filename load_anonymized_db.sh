@@ -26,6 +26,7 @@ ${SHELL_DIR}/start_db.sh
 
 ${SHELL_DIR}/drop_db.sh --have-databases
 ${SHELL_DIR}/create_db.sh --have-databases
+${SHELL_DIR}/migrate_db.sh --have-databases
 ${SHELL_DIR}/load_anonymized_data.sh --have-databases
 ${SHELL_DIR}/enable_users.sh --have-databases
 ${SHELL_DIR}/prepare_test_db.sh --have-databases
