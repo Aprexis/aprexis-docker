@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Performs a git pull on all of the sub repositories that are checked out. If the repository has local changes, those changes are stashed before the pull.
+# Performs a git diff on all of the sub repositories that are checked out.
 
 DIR=$(dirname "$0")
 
