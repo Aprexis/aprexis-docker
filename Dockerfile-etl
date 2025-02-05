@@ -1,4 +1,5 @@
 FROM ruby:3.0.3
+COPY ./aprexis-etl/Gemfile.lock /tmp/Gemfile.lock.tmp
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9 && \
   echo "deb http://repos.azulsystems.com/debian stable main" | tee /etc/apt/sources.list.d/zulu.list && \
   apt-get update -qq && \
@@ -13,7 +14,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361
   zip \
   --fix-missing \
   --no-install-recommends && \
-  gem update bundler
+  gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 )
 
 # Set up the shell RC file
 COPY export-root-env.sh .env /root/
