@@ -1,9 +1,10 @@
 FROM ruby:3.0.3
+COPY ./aprexis-api/Gemfile.lock /tmp/Gemfile.lock.tmp
 RUN apt-get update -qq && \
     apt-get install -y curl git build-essential libpq-dev nodejs libpq-dev postgresql-client \
     --fix-missing \
     --no-install-recommends && \
-    gem update bundler
+    gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 )
 
 # Set up the shell RC file
 COPY .env export-root-env.sh /root/

@@ -1,4 +1,5 @@
 FROM ruby:3.0.3
+COPY ./aprexis-platform-5/Gemfile.lock /tmp/Gemfile.lock.tmp
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9 && \
     echo "deb http://repos.azulsystems.com/debian stable main" | tee /etc/apt/sources.list.d/zulu.list && \
     apt-get update -qq && \
@@ -8,17 +9,17 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361
     apt-get install chrpath libssl-dev libxft-dev -y && \
     apt-get install libfreetype6 libfreetype6-dev -y && \
     apt-get install libfontconfig1 libfontconfig1-dev -y && \
-    gem update bundler
+    gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 )
 
 
 # Install Google Chrome Stable and fonts
 # Note: this installs the necessary libs to make the browser work with Puppeteer.
 RUN apt-get update && apt-get install gnupg wget -y && \
-  wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
-  sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
-  apt-get update && \
-  apt-get install google-chrome-stable -y --no-install-recommends && \
-  rm -rf /var/lib/apt/lists/*
+    wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
+    sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+    apt-get update && \
+    apt-get install google-chrome-stable -y --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set up the shell RC file
 COPY .env export-root-env.sh /root/
