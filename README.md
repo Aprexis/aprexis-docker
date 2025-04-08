@@ -19,13 +19,22 @@ cp env.example .env
 ```
 #### 2. Create Github access token
 
-Create a fine-grained access token that has access to all Aprexis repositories. See https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+Create a classic access token to allow you to pull the aprexis-engine gem from Github. To do this:
+
+1. Log into your account on github.com
+2. Click on your picture (or whatever icon it has to display your account) and select Settings from the pulldown
+3. Click on Developer Settings (at the bottom of the settings pages)
+4. Expand the entry Personal access tokens
+5. Select Tokens (classic)
+6. Click Generate new token
+7. My personal token doesn't expire, but that's because we're currently using it for deploying to the production, staging, and demo machines. It is a pain to deal with expired tokens, so I won't force you to set an expiration, but you can
+8. I haven't tried to figure out what the minimum set of permissions needed is. I know that this set works: admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, repo, user, workflow, write:discussion, write:package
 
 #### 3. Update .env
 
 Update the `.env` file.
 - Set the `APREXIS_USERNAME` to your github username that owns the access token just created.
-- Set `APREXIS_ENGINE_TOKEN` to the to token.
+- Set `APREXIS_ENGINE_TOKEN` to the access token.
 
 Then:
 ```
