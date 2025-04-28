@@ -339,6 +339,7 @@ To run the platform and API tests, you can start a shell running on the appropri
 ```bash
 make platform_shell # (to test the original Rails platform)
 make api_shell # (to test the API)
+make engine_shell # (to test the Engine)
 ```
 
 ## Pull all latest code

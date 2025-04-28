@@ -6,15 +6,18 @@
 # Environment:
 #    APREXIS_VARIETY              the version of Aprexis to run (api or platform).
 #    APREXIS_DOCKER_COMPOSE_FILE  the docker compose file to use to build the system. Default depends on APREXIS_VARIETY.
+#    APREXIS_DATA_FOLDER          the folder containing the database dump to load. Default is ./aprexis-data/database.
 
 # Author:  Ian Brown
 # Since:   2021/05/25
-# Version: 1.0.0
+# Version: 1.1.0
 
 SHELL_DIR=`dirname "$0"`
 APREXIS_VARIETY=${APREXIS_VARIETY:-api}
 APREXIS_DOCKER_COMPOSE_FILE=docker-compose-${APREXIS_VARIETY}.yml
-data_file=$(ls -t `find ./aprexis-data -type f ! -iname ".*"` | head -n 1 | cut -d' ' -f2)
+APREXIS_DATA_FOLDER=${APREXIS_DATA_FOLDER:-./aprexis-data/database}
+data_file=$(ls -t `find ${APREXIS_DATA_FOLDER} -type f ! -iname ".*"` | head -n 1 | cut -d' ' -f2)
+
 
 if [ "${APREXIS_VARIETY}" = 'engine' ]; then
   APREXIS_SHELL='engine'
