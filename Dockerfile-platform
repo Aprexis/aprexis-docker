@@ -1,4 +1,8 @@
 FROM ruby:3.0.3
+
+ARG APREXIS_ENGINE_TOKEN
+ENV APREXIS_ENGINE_TOKEN=$APREXIS_ENGINE_TOKEN
+
 COPY ./aprexis-platform-5/Gemfile.lock /tmp/Gemfile.lock.tmp
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9 && \
     echo "deb http://repos.azulsystems.com/debian stable main" | tee /etc/apt/sources.list.d/zulu.list && \
@@ -21,9 +25,7 @@ RUN apt-get update && apt-get install gnupg wget -y && \
     apt-get install google-chrome-stable -y --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
-# Set up the shell RC file
-COPY .env export-root-env.sh /root/
-RUN chmod +x /root/export-root-env.sh && echo "source /root/export-root-env.sh" >> /root/.bashrc && echo "export OPENSSL_CONF=/etc/ssl/" >> /root/.bashrc
+RUN echo "export OPENSSL_CONF=/etc/ssl/" >> /root/.bashrc
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
@@ -51,7 +53,6 @@ RUN cp /etc/hosts /tmp/hosts.original && sed -e 's/localhost ip6-localhost/ip6-l
 WORKDIR /aprexis-platform-5
 COPY ./aprexis-platform-5/Gemfile ./aprexis-platform-5/Gemfile.lock ./aprexis-platform-5/package.json ./
 RUN git config --global --add safe.directory /aprexis-platform-5 && \
-    export $(grep -v '^[[:space:]]*#' /root/.env | xargs) && \
     bundle config --local GITHUB__COM x-access-token:${APREXIS_ENGINE_TOKEN} && bundle install
 
 # Install the application
