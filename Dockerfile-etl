@@ -16,9 +16,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361
   --no-install-recommends && \
   gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 )
 
-# Set up the shell RC file
-COPY export-root-env.sh .env /root/
-RUN chmod +x /root/export-root-env.sh && echo "source /root/export-root-env.sh" >> /root/.bashrc && echo "export SCRIPT_ENV=development" >> /root/.bashrc
+RUN echo "export SCRIPT_ENV=development" >> /root/.bashrc
 
 # Install some additional files
 WORKDIR /aprexis
