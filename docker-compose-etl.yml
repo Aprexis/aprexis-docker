@@ -31,6 +31,7 @@ services:
     volumes:
       - ./aprexis-platform-5:/aprexis-platform-5
       - ./aprexis-data:/aprexis-data
+      - bundler_gems:/usr/local/bundle
     command: bash --login -c "/aprexis/setup-for-platform.sh; rm -f tmp/pids/server.pid && bundle exec puma -b tcp://0.0.0.0:3000"
     ports:
       - "${APREXIS_PLATFORM_PORT}:3000"
@@ -48,6 +49,7 @@ services:
     volumes:
       - ./aprexis-api:/aprexis-api
       - ./aprexis-platform-5/storage:/aprexis-api/storage
+      - bundler_gems:/usr/local/bundle
     command: bash --login -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && bundle exec puma -b tcp://0.0.0.0:3250"
     ports:
       - "${APREXIS_API_PORT}:3250"
@@ -80,6 +82,7 @@ services:
       - redis
     volumes:
       - ./aprexis-platform-5:/aprexis-platform-5
+      - bundler_gems:/usr/local/bundle
     command: bash --login -c "/aprexis/setup-for-platform.sh; bundle exec rails resque:work QUEUE=*"
     ports: []
     extra_hosts:
@@ -92,6 +95,7 @@ services:
       - redis
     volumes:
       - ./aprexis-platform-5:/aprexis-platform-5
+      - bundler_gems:/usr/local/bundle
     command: bash --login -c "/aprexis/setup-for-platform.sh; bundle exec rails resque:scheduler"
     ports: []
     extra_hosts:
@@ -108,6 +112,7 @@ services:
       - ./aprexis-etl:/aprexis-etl
       - ./aprexis-platform-5/storage:/aprexis-api/storage
       - ./aprexis-data:/aprexis-data
+      - bundler_gems:/usr/local/bundle
     command: bash --login -c "/aprexis/setup-for-etl.sh; ./start.sh"
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -115,3 +120,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  bundler_gems:

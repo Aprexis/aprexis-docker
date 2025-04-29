@@ -8,9 +8,11 @@ do_git_diff () {
   GIT_DIR=$1
   cd $DIR/$GIT_DIR
   GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-  echo "-------"
-  echo "Diff of $GIT_DIR $GIT_BRANCH ..."
-  git diff
+  echo "------------------------------------------------------"
+  echo "       Diff of $GIT_DIR"
+  echo "       Branch: $GIT_BRANCH"
+  echo "------------------------------------------------------"
+  git --no-pager diff
 }
 
 if [ -d "$DIR/aprexis-api" ]; then
