@@ -27,7 +27,6 @@ RUN cp /etc/hosts /tmp/hosts.original && sed -e 's/localhost ip6-localhost/ip6-l
 
 WORKDIR /aprexis-etl
 COPY ./aprexis-etl/Gemfile ./aprexis-etl/Gemfile.lock ./
-RUN bundle install
 
 # Install the application
 ADD ./aprexis-etl /aprexis-etl
