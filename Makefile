@@ -34,6 +34,9 @@ build_platform:
 
 bundle_install:
 	docker-compose -f docker-compose-api.yml run --rm platform bundle install
+	docker-compose -f docker-compose-api.yml run --rm api bundle install
+	docker-compose -f docker-compose-etl.yml run --rm etl bundle install
+	docker-compose -f docker-compose-engine.yml run --rm engine bundle install
 
 clean_docker:
 	export APREXIS_VARIETY=${APREXIS_VARIETY}; ${DIR}/clean_docker.sh
