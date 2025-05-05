@@ -24,7 +24,7 @@ RUN cp /etc/hosts /tmp/hosts.original && sed -e 's/localhost ip6-localhost/ip6-l
 WORKDIR /aprexis-api
 COPY ./aprexis-api/Gemfile ./aprexis-api/Gemfile.lock ./
 RUN env
-RUN bundle config --local GITHUB__COM x-access-token:${APREXIS_ENGINE_TOKEN} && bundle install
+RUN bundle config --local GITHUB__COM x-access-token:${APREXIS_ENGINE_TOKEN}
 
 # Install the application
 ADD ./aprexis-api /aprexis-api

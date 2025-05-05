@@ -67,6 +67,7 @@ To build it from the new-style anonymized data, run:
 make build_engine
 make load_anonymized_db
 make build
+make bundle_install
 make up
 ```
 
@@ -76,6 +77,7 @@ To build it from the old-style full database dump anonymized data, run:
 make build_engine
 make new_db
 make build
+make bundle_install
 make up
 ```
 

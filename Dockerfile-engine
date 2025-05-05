@@ -19,7 +19,6 @@ WORKDIR /aprexis-engine
 RUN mkdir -p /aprexis-engine/lib/aprexis/engine
 COPY ./aprexis-engine/lib/aprexis/engine/version.rb /aprexis-engine/lib/aprexis/engine
 COPY ./aprexis-engine/Gemfile ./aprexis-engine/aprexis-engine.gemspec ./aprexis-engine/Gemfile.lock ./
-RUN bundle install
 
 # Install the application
 ADD ./aprexis-engine /aprexis-engine
