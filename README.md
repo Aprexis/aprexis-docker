@@ -15,6 +15,7 @@ git clone git@github.com:Aprexis/aprexis-engine.git
 git clone git@github.com:Aprexis/aprexis-platform-5.git
 git clone git@github.com:Aprexis/aprexis-api.git
 git clone git@github.com:Aprexis/aprexis-api-ui.git
+git clone git@github.com:Aprexis/aprexis-etl.git
 cp env.example .env
 ```
 #### 2. Create Github access token
