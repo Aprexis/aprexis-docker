@@ -43,7 +43,7 @@ source .env
 
 #### 4. Get a database dump
 
-Get a `.gz` database dump from S3 or Google drive. It will be named something like `aprexis_anonymized_YYYY-MM-DD.sql.gz`. Put it in the `aprexis-data` dir.
+Get a `.gz` database dump from S3 or Google drive. It will be named something like `aprexis_anonymized_YYYY-MM-DD.sql.gz`. Put it in the `aprexis-data/database` dir.
 
 #### 5. Modify Gemfiles for local development
 
@@ -257,12 +257,12 @@ To really be able to run the system, you will need this data. In theory, you cou
 The data is kept on Amazon S3. You are supposed to be able to run the following commands to pull it down:
 
 ```bash
-cd aprexis-data
+cd aprexis-data/database
 wget https://aprexis-test-data.s3-us-west-2.amazonaws.com/<latest anonymized data>.sql.gz
 cd ..
 ```
 
-S3 may not grant this access. If you have an AWS login for the Aprexis project, you can download the file directly from S3 using the AWS console. Place it into the **aprexis-data** folder.
+S3 may not grant this access. If you have an AWS login for the Aprexis project, you can download the file directly from S3 using the AWS console. Place it into the **aprexis-data/database** folder.
 
 You do not need to unzip this file after downloading it.
 
