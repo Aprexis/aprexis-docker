@@ -1,8 +1,6 @@
 FROM ruby:3.0.3
 COPY ./aprexis-etl/Gemfile.lock /tmp/Gemfile.lock.tmp
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9 && \
-  echo "deb http://repos.azulsystems.com/debian stable main" | tee /etc/apt/sources.list.d/zulu.list && \
-  apt-get update -qq && \
+RUN apt-get update -qq && \
   apt-get install -y curl \
   git \
   build-essential \
@@ -10,7 +8,6 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361
   nodejs \
   libpq-dev \
   postgresql-client \
-  zulu-8 \
   zip \
   --fix-missing \
   --no-install-recommends && \
@@ -20,7 +17,6 @@ RUN echo "export SCRIPT_ENV=development" >> /root/.bashrc
 
 # Install some additional files
 WORKDIR /aprexis
-COPY wait-for-it.sh setup-for-etl.sh ./
 
 # Disable IPV6
 RUN cp /etc/hosts /tmp/hosts.original && sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts

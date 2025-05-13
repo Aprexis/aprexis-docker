@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
- 
+
 # Executes docker-compose to rollback an existing database.
 
 # Environment:
@@ -27,7 +27,7 @@ if [ $# -eq 0 ]; then
 fi
 
 docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
-    run -T --no-deps --rm ${APREXIS_SHELL} bash --login -c "/aprexis/setup-for-rails.sh; bundle exec rails db:rollback STEP=${STEP}"
+    run -T --no-deps --rm ${APREXIS_SHELL} bundle exec rails db:rollback STEP=${STEP}
 
 if [ $# -eq 0 ]; then
   ${SHELL_DIR}/stop_db.sh

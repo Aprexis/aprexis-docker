@@ -13,4 +13,4 @@
 APREXIS_VARIETY=${APREXIS_VARIETY:-api}
 APREXIS_DOCKER_COMPOSE_FILE=docker-compose-${APREXIS_VARIETY}.yml
 
-docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} build
+docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} build --no-cache

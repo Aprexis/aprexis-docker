@@ -36,9 +36,12 @@ services:
       - ./aprexis-engine:/aprexis-engine
       - bundler_gems:/usr/local/bundle
     env_file: .env
-    command: bash --login -c "/aprexis/setup-for-platform.sh; rm -f tmp/pids/server.pid && bundle exec puma -b tcp://0.0.0.0:3000"
+    command: bundle exec puma -C config/puma.rb
+    depends_on:
+      - postgres
+      - redis
     ports:
-      - "${APREXIS_PLATFORM_PORT}:3000"
+      - "${APREXIS_PLATFORM_PORT}:3250"
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -58,7 +61,10 @@ services:
       - ./aprexis-engine:/aprexis-engine
       - bundler_gems:/usr/local/bundle
     env_file: .env
-    command: bash --login -c "/aprexis/setup-for-rails.sh; rm -f tmp/pids/server.pid && bundle exec puma -b tcp://0.0.0.0:3250"
+    command: bundle exec puma -C config/puma.rb
+    depends_on:
+      - postgres
+      - redis
     ports:
       - "${APREXIS_API_PORT}:3250"
     extra_hosts:
@@ -93,7 +99,10 @@ services:
       - ./aprexis-engine:/aprexis-engine
       - bundler_gems:/usr/local/bundle
     env_file: .env
-    command: bash --login -c "/aprexis/setup-for-platform.sh; bundle exec rails resque:work QUEUE=*"
+    command: bundle exec rails resque:work QUEUE=*
+    depends_on:
+      - postgres
+      - redis
     ports: []
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -108,7 +117,10 @@ services:
       - ./aprexis-engine:/aprexis-engine
       - bundler_gems:/usr/local/bundle
     env_file: .env
-    command: bash --login -c "/aprexis/setup-for-platform.sh; bundle exec rails resque:scheduler"
+    command: bundle exec rails resque:scheduler
+    depends_on:
+      - postgres
+      - redis
     ports: []
     extra_hosts:
       - "host.docker.internal:host-gateway"

@@ -12,7 +12,6 @@ RUN apt-get update -qq && \
 
 # Install some additional files
 WORKDIR /aprexis
-COPY wait-for-it.sh setup-for-rails.sh ./
 
 # Install aprexis-engine (uncomment if using local repository)
 WORKDIR /aprexis-engine

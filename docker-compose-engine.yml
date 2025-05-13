@@ -35,6 +35,9 @@ services:
       - bundler_gems:/usr/local/bundle
     env_file: .env
     command: bash
+    depends_on:
+      - postgres
+      - redis
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

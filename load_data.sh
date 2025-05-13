@@ -32,20 +32,26 @@ fi
 if [ "${data_file}" = "" ]; then
   echo "Loading schema"
   docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
-    run -T --no-deps --rm engine bash --login -c "/aprexis/setup-for-rails.sh; bundle exec rails db:schema:load"
+    run -T --no-deps --rm engine bundle exec rails db:schema:load
 else
   echo "Loading ${data_file}"
   if [[ "${data_file}" == *.gz ]]; then
     gunzip -c "${data_file}" | docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
-      run -T --no-deps --rm ${APREXIS_SHELL} bash --login -c "/aprexis/setup-for-rails.sh; psql -h postgres -U postgres aprexis_development"
+      run -T --no-deps --rm ${APREXIS_SHELL} psql -h postgres -U postgres aprexis_development
   else
     cat "${data_file}" | docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
-      run -T --no-deps --rm ${APREXIS_SHELL} bash --login -c "/aprexis/setup-for-rails.sh; psql -h postgres -U postgres aprexis_development"
+      run -T --no-deps --rm ${APREXIS_SHELL} psql -h postgres -U postgres aprexis_development
   fi
 
   echo "Ensuring that the name field has a value"
   cat set_name_from_question_key.sql | docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
-      run -T --no-deps --rm ${APREXIS_SHELL} bash --login -c "/aprexis/setup-for-rails.sh; psql -h postgres -U postgres aprexis_development"
+      run -T --no-deps --rm ${APREXIS_SHELL} psql -h postgres -U postgres aprexis_development
+
+  echo "UPDATE gold_standard_package_versions SET ncpdp_exceptional_count = ncpdp_exceptional_count::numeric::integer::varchar, ncpdp_script_form_code = ncpdp_script_form_code::numeric::integer::varchar, inner_package_count = inner_package_count::numeric::integer::varchar;" | docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
+      run -T --no-deps --rm ${APREXIS_SHELL} psql -h postgres -U postgres aprexis_development
+
+  echo "UPDATE gold_standard_packages SET ncpdp_exceptional_count = ncpdp_exceptional_count::numeric::integer::varchar, ncpdp_script_form_code = ncpdp_script_form_code::numeric::integer::varchar, inner_package_count = inner_package_count::numeric::integer::varchar;" | docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
+      run -T --no-deps --rm ${APREXIS_SHELL} psql -h postgres -U postgres aprexis_development
 
   echo "Migrating to latest schema"
   ${SHELL_DIR}/migrate_db.sh --have-databases

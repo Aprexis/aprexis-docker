@@ -1,16 +1,13 @@
 FROM ruby:3.0.3
 COPY ./aprexis-engine/Gemfile.lock /tmp/Gemfile.lock.tmp
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9 && \
-  echo "deb http://repos.azulsystems.com/debian stable main" | tee /etc/apt/sources.list.d/zulu.list && \
-  apt-get update -qq && \
-  apt-get install -y curl git build-essential libpq-dev nodejs libpq-dev postgresql-client zip zulu-8 \
+RUN apt-get update -qq && \
+  apt-get install -y curl git build-essential libpq-dev nodejs libpq-dev postgresql-client zip \
   --fix-missing \
   --no-install-recommends && \
   gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 )
 
 # Install some additional files
 WORKDIR /aprexis
-COPY wait-for-it.sh setup-for-rails.sh ./
 
 # Disable IPV6
 RUN cp /etc/hosts /tmp/hosts.original && sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts
