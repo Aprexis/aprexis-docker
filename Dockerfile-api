@@ -5,7 +5,7 @@ ENV APREXIS_ENGINE_TOKEN=$APREXIS_ENGINE_TOKEN
 
 COPY ./aprexis-api/Gemfile.lock /tmp/Gemfile.lock.tmp
 RUN apt-get update -qq && \
-    apt-get install -y curl git build-essential libpq-dev nodejs libpq-dev postgresql-client \
+    apt-get install -y curl git build-essential libpq-dev nodejs postgresql-client \
     --fix-missing \
     --no-install-recommends && \
     gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 )

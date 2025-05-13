@@ -16,16 +16,30 @@ RUN apt-get update -qq && \
 
 # Install Google Chrome Stable and fonts
 # Note: this installs the necessary libs to make the browser work with Puppeteer.
-RUN apt-get update && apt-get install gnupg wget -y && \
+RUN dpkg --print-architecture > /tmp/arch.txt
+
+RUN apt-get update && apt-get install gnupg wget -y
+
+RUN if [ "$(cat /tmp/arch.txt)" = "amd64" ]; then \
     wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
     sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
     apt-get update && \
-    apt-get install google-chrome-stable -y --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install google-chrome-stable -y --no-install-recommends; \
+fi
+
+RUN if [ "$(cat /tmp/arch.txt)" = "arm64" ]; then \
+    apt-get update && \
+    (apt-get install -y chromium --no-install-recommends || \
+     apt-get install -y chromium-browser --no-install-recommends) && \
+    ln -s $(which chromium || which chromium-browser) /usr/bin/google-chrome; \
+fi
+
+RUN rm -rf /var/lib/apt/lists/* && \
+    rm /tmp/arch.txt
 
 RUN echo "export OPENSSL_CONF=/etc/ssl/" >> /root/.bashrc
 
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
 # ENV XDG_CONFIG_HOME=/tmp/.chromium
 # ENV XDG_CACHE_HOME=/tmp/.chromium
@@ -54,4 +68,3 @@ RUN git config --global --add safe.directory /aprexis-platform-5 && \
 
 # Install the application
 ADD ./aprexis-platform-5 /aprexis-platform-5
-

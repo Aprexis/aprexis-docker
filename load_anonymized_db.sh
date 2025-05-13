@@ -21,7 +21,7 @@ data_file=$(ls -t `find ${APREXIS_DATA_FOLDER} -type f ! -iname ".*"` | head -n 
 if [ "${data_file}" = "" ]; then
   echo "No data file to load. Aborting..."
   exit -1
-end
+fi
 
 
 ${SHELL_DIR}/start_db.sh APREXIS_VARIETY=${APREXIS_VARIETY} APREXIS_DOCKER_COMPOSE_FILE=${APREXIS_DOCKER_COMPOSE_FILE}
