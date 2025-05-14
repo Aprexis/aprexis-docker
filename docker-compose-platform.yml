@@ -36,7 +36,7 @@ services:
       - ./aprexis-engine:/aprexis-engine
       - bundler_gems:/usr/local/bundle
     env_file: .env
-    command: bundle exec puma -C config/puma.rb
+    command: bundle exec puma -b tcp://0.0.0.0:3000
     depends_on:
       - postgres
       - redis"

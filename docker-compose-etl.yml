@@ -32,7 +32,7 @@ services:
       - ./aprexis-platform-5:/aprexis-platform-5
       - ./aprexis-data:/aprexis-data
       - bundler_gems:/usr/local/bundle
-    command: bundle exec puma -C config/puma.rb
+    command: bundle exec puma -b tcp://0.0.0.0:3000
     depends_on:
       - postgres
       - redis
