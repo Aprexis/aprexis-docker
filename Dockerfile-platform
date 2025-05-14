@@ -1,12 +1,7 @@
 FROM ruby:3.0.3
 
-ARG APREXIS_ENGINE_TOKEN
-ENV APREXIS_ENGINE_TOKEN=$APREXIS_ENGINE_TOKEN
-
 COPY ./aprexis-platform-5/Gemfile.lock /tmp/Gemfile.lock.tmp
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9 && \
-    echo "deb http://repos.azulsystems.com/debian stable main" | tee /etc/apt/sources.list.d/zulu.list && \
-    apt-get update -qq && \
+RUN apt-get update -qq && \
     apt-get install -y curl git build-essential libpq-dev nodejs npm libpq-dev postgresql-client zip \
     --fix-missing \
     --no-install-recommends && \
@@ -53,21 +48,13 @@ RUN npm install npm@latest -g && \
     n latest
 RUN npm install
 
-# Install some additional files
-WORKDIR /aprexis
-COPY wait-for-it.sh setup-for-rails.sh setup-for-platform.sh ./
-
 # Install aprexis-engine (uncomment if using local repository)
 WORKDIR /aprexis-engine
 ADD ./aprexis-engine /aprexis-engine
 
-# Disable IPV6
-RUN cp /etc/hosts /tmp/hosts.original && sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts
-
 WORKDIR /aprexis-platform-5
 COPY ./aprexis-platform-5/Gemfile ./aprexis-platform-5/Gemfile.lock ./aprexis-platform-5/package.json ./
-RUN git config --global --add safe.directory /aprexis-platform-5 && \
-    bundle config --local GITHUB__COM x-access-token:${APREXIS_ENGINE_TOKEN}
+RUN git config --global --add safe.directory /aprexis-platform-5
 
 # Install the application
 ADD ./aprexis-platform-5 /aprexis-platform-5

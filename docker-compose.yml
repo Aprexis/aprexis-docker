@@ -39,9 +39,53 @@ services:
     command: bundle exec puma -b tcp://0.0.0.0:3000
     depends_on:
       - postgres
-      - redis"
+      - redis
     ports:
       - "${APREXIS_PLATFORM_PORT}:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+      args:
+        APREXIS_ENGINE_TOKEN: ${APREXIS_ENGINE_TOKEN}
+    image: aprexis/aprexis-api:latest
+    links:
+      - postgres
+      - redis
+    volumes:
+      - ./aprexis-api:/aprexis-api
+      - ./aprexis-platform-5/storage:/aprexis-api/storage
+      - ./aprexis-engine:/aprexis-engine
+      - bundler_gems:/usr/local/bundle
+    env_file: .env
+    command: bundle exec puma -C config/puma.rb
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "${APREXIS_API_PORT}:3250"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  ui:
+    image: node:14.16.0
+    ports:
+      - "${APREXIS_API_UI_PORT}:3500"
+    environment:
+      - NODE_ENV=development
+      - PORT=3500
+      - REACT_APP_APREXIS_API=http://localhost:${APREXIS_API_PORT}
+    links:
+      - api
+    volumes:
+      - ./aprexis-api-ui:/app
+    working_dir: /app
+    command: "bash --login -c 'yarn install; yarn start-docker'"
+    depends_on:
+      - api
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -78,6 +122,27 @@ services:
       - postgres
       - redis
     ports: []
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  engine:
+    build:
+      context: .
+      dockerfile: Dockerfile-engine
+      args:
+        APREXIS_ENGINE_TOKEN: ${APREXIS_ENGINE_TOKEN}
+    image: aprexis/aprexis-engine:latest
+    links:
+      - postgres
+      - redis
+    volumes:
+      - ./aprexis-engine:/aprexis-engine
+      - bundler_gems:/usr/local/bundle
+    env_file: .env
+    command: bash
+    depends_on:
+      - postgres
+      - redis
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

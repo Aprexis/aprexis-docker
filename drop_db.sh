@@ -26,10 +26,9 @@ fi
 
 echo "Dropping existing database"
 docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
-    run -T --no-deps --rm ${APREXIS_SHELL} bash --login -c "/aprexis/setup-for-rails.sh; psql -l -h postgres -U postgres | grep aprexis_development | wc -l" && \
+    run -T --no-deps --rm ${APREXIS_SHELL} psql -l -h postgres -U postgres | grep aprexis_development | wc -l" && \
   docker-compose -f ${APREXIS_DOCKER_COMPOSE_FILE} \
-    run -T --no-deps --rm ${APREXIS_SHELL} bash --login -c \
-      "/aprexis/setup-for-rails.sh; bundle exec rails app:db:environment:set RAILS_ENV=development; bundle exec rails db:drop"
+    run -T --no-deps --rm ${APREXIS_SHELL} bundle exec rails db:drop -e development
 
 if [ $# -eq 0 ]; then
   ${SHELL_DIR}/stop_db.sh
