@@ -15,12 +15,6 @@ RUN apt-get update -qq && \
 
 RUN echo "export SCRIPT_ENV=development" >> /root/.bashrc
 
-# Install some additional files
-WORKDIR /aprexis
-
-# Disable IPV6
-RUN cp /etc/hosts /tmp/hosts.original && sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts
-
 WORKDIR /aprexis-etl
 COPY ./aprexis-etl/Gemfile ./aprexis-etl/Gemfile.lock ./
 

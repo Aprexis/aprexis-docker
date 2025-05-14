@@ -6,12 +6,6 @@ RUN apt-get update -qq && \
   --no-install-recommends && \
   gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 )
 
-# Install some additional files
-WORKDIR /aprexis
-
-# Disable IPV6
-RUN cp /etc/hosts /tmp/hosts.original && sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts
-
 WORKDIR /aprexis-engine
 RUN mkdir -p /aprexis-engine/lib/aprexis/engine
 COPY ./aprexis-engine/lib/aprexis/engine/version.rb /aprexis-engine/lib/aprexis/engine

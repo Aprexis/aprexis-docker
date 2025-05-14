@@ -48,15 +48,9 @@ RUN npm install npm@latest -g && \
     n latest
 RUN npm install
 
-# Install some additional files
-WORKDIR /aprexis
-
 # Install aprexis-engine (uncomment if using local repository)
 WORKDIR /aprexis-engine
 ADD ./aprexis-engine /aprexis-engine
-
-# Disable IPV6
-RUN cp /etc/hosts /tmp/hosts.original && sed -e 's/localhost ip6-localhost/ip6-localhost/' /tmp/hosts.original >/tmp/hosts
 
 WORKDIR /aprexis-platform-5
 COPY ./aprexis-platform-5/Gemfile ./aprexis-platform-5/Gemfile.lock ./aprexis-platform-5/package.json ./
