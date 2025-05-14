@@ -1,0 +1,152 @@
+version: '2.2'
+
+services:
+  postgres:
+    image: postgres:13.4
+    shm_size: 1g
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=
+    ports:
+      - "${APREXIS_POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+    ports:
+      - "${APREXIS_REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/var/lib/redis/data
+
+  platform:
+    build:
+      context: .
+      dockerfile: Dockerfile-platform
+      args:
+        APREXIS_ENGINE_TOKEN: ${APREXIS_ENGINE_TOKEN}
+    image: aprexis/aprexis-platform-5:latest
+    links:
+      - postgres
+      - redis
+    volumes:
+      - ./aprexis-platform-5:/aprexis-platform-5
+      - ./aprexis-data:/aprexis-data
+      - ./aprexis-engine:/aprexis-engine
+      - bundler_gems:/usr/local/bundle
+    env_file: .env
+    command: bundle exec puma -C config/puma.rb
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "${APREXIS_PLATFORM_PORT}:3250"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+      args:
+        APREXIS_ENGINE_TOKEN: ${APREXIS_ENGINE_TOKEN}
+    image: aprexis/aprexis-api:latest
+    links:
+      - postgres
+      - redis
+    volumes:
+      - ./aprexis-api:/aprexis-api
+      - ./aprexis-platform-5/storage:/aprexis-api/storage
+      - ./aprexis-engine:/aprexis-engine
+      - bundler_gems:/usr/local/bundle
+    env_file: .env
+    command: bundle exec puma -C config/puma.rb
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "${APREXIS_API_PORT}:3250"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  ui:
+    image: node:14.16.0
+    ports:
+      - "${APREXIS_API_UI_PORT}:3500"
+    environment:
+      - NODE_ENV=development
+      - PORT=3500
+      - REACT_APP_APREXIS_API=http://localhost:${APREXIS_API_PORT}
+    links:
+      - api
+    volumes:
+      - ./aprexis-api-ui:/app
+    working_dir: /app
+    command: "bash --login -c 'yarn install; yarn start-docker'"
+    depends_on:
+      - api
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  resque-worker:
+    image: aprexis/aprexis-platform-5:latest
+    links:
+      - postgres
+      - redis
+    volumes:
+      - ./aprexis-platform-5:/aprexis-platform-5
+      - ./aprexis-engine:/aprexis-engine
+      - bundler_gems:/usr/local/bundle
+    env_file: .env
+    command: bundle exec rails resque:work QUEUE=*
+    depends_on:
+      - postgres
+      - redis
+    ports: []
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  resque-scheduler:
+    image: aprexis/aprexis-platform-5:latest
+    links:
+      - postgres
+      - redis
+    volumes:
+      - ./aprexis-platform-5:/aprexis-platform-5
+      - ./aprexis-engine:/aprexis-engine
+      - bundler_gems:/usr/local/bundle
+    env_file: .env
+    command: bundle exec rails resque:scheduler
+    depends_on:
+      - postgres
+      - redis
+    ports: []
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  engine:
+    build:
+      context: .
+      dockerfile: Dockerfile-engine
+      args:
+        APREXIS_ENGINE_TOKEN: ${APREXIS_ENGINE_TOKEN}
+    image: aprexis/aprexis-engine:latest
+    links:
+      - postgres
+      - redis
+    volumes:
+      - ./aprexis-engine:/aprexis-engine
+      - bundler_gems:/usr/local/bundle
+    env_file: .env
+    command: bash
+    depends_on:
+      - postgres
+      - redis
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  postgres_data:
+  redis_data:
+  bundler_gems:

@@ -46,9 +46,9 @@ source .env
 
 Get a `.gz` database dump from S3 or Google drive. It will be named something like `aprexis_anonymized_YYYY-MM-DD.sql.gz`. Put it in the `aprexis-data/database` dir.
 
-#### 5. Modify Gemfiles for local development
+#### 5. (Optional) Modify Gemfiles for local development
 
-Edit theses two files:
+If you need to make changes to the aprexis-engine gem, edit theses two files:
 
 ```
 aprexis-api/Gemfile
@@ -62,23 +62,9 @@ Set the `aprexis-engine` gem line in both files to this:
 
 #### 6. Build and run the project
 
-To build it from the new-style anonymized data, run:
-
 ```bash
-make build_engine
-make load_anonymized_db
-make build
-make bundle_install
-make up
-```
-
-To build it from the old-style full database dump anonymized data, run:
-
-```bash
-make build_engine
+make build_all
 make new_db
-make build
-make bundle_install
 make up
 ```
 
@@ -88,6 +74,25 @@ make up
 - API UI:  http://localhost:3500
 - API:  http://localhost:3250
 
+
+## Development
+
+### Updating gems
+
+If you get any errors about gems missing
+```bash
+make bundle_install
+```
+
+### Running migrations
+```bash
+make migrate_db
+```
+
+### Reseting the database
+```bash
+make new_db
+```
 
 ## Varieties
 

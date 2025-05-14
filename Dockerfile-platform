@@ -1,8 +1,5 @@
 FROM ruby:3.0.3
 
-ARG APREXIS_ENGINE_TOKEN
-ENV APREXIS_ENGINE_TOKEN=$APREXIS_ENGINE_TOKEN
-
 COPY ./aprexis-platform-5/Gemfile.lock /tmp/Gemfile.lock.tmp
 RUN apt-get update -qq && \
     apt-get install -y curl git build-essential libpq-dev nodejs npm libpq-dev postgresql-client zip \
@@ -63,8 +60,7 @@ RUN cp /etc/hosts /tmp/hosts.original && sed -e 's/localhost ip6-localhost/ip6-l
 
 WORKDIR /aprexis-platform-5
 COPY ./aprexis-platform-5/Gemfile ./aprexis-platform-5/Gemfile.lock ./aprexis-platform-5/package.json ./
-RUN git config --global --add safe.directory /aprexis-platform-5 && \
-    bundle config --local GITHUB__COM x-access-token:${APREXIS_ENGINE_TOKEN}
+RUN git config --global --add safe.directory /aprexis-platform-5
 
 # Install the application
 ADD ./aprexis-platform-5 /aprexis-platform-5
