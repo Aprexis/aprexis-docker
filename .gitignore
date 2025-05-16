@@ -1,8 +1,14 @@
-# Keep the folder 'aprexis-data', but ignore all of its contents except a marker file.
-aprexis-data/*.gz
-aprexis-data/database/*.gz
+# Keep the folder 'aprexis-data', and its first level subfolders, but ignore all contents except marker files.
+aprexis-data/*
+!aprexis-data/database/
+aprexis-data/database/*
 !aprexis-data/database/.gitkeep
-
+!aprexis-data/anonymized/
+aprexis-data/anonymized/*
+!aprexis-data/anonymized/.gitkeep
+!aprexis-data/GS/
+aprexis-data/GS/*
+!aprexis-data/GS/.gitkeep
 
 # Ignore the code folders.
 aprexis-api/
