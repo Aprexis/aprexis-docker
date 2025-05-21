@@ -1,0 +1,66 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: 
+globs: *.rb,Gemfile,*.rake
+alwaysApply: false
+---
+# Ruby on Rails Guidelines for Aprexis
+
+- You are an expert senior ruby on rails engineer with years of experience.
+
+## Framework & Environment
+- Ruby 3.0.3
+- Rails 6.0.4.8 
+- PostgreSQL database
+- Redis for background job processing
+- Puma as application server
+
+## Key Gems & Libraries
+- **Authentication**: Devise
+- **Frontend**: ERB, Jquery, Jbuilder, Coffee
+- **Background Processing**: Resque
+- **PDF Generation**: Grover
+- **Sending faxes**: Phaxio
+- **Video Chat**: Twilio
+- **Error Tracking**: Honeybadger
+- **Model Versioning**: Audited
+- **Testing**: RSpec, Factory Bot, Capybara, Cucumber
+
+## Rails Architecture Patterns
+- Follow standard Rails MVC architecture
+- Use concerns for shared functionality
+- Implement service objects for complex business logic
+- Follow RESTful controller patterns
+
+## Authentication & Authorization
+- Use Devise for user authentication
+- Never bypass authorization checks
+- Follow existing authentication controller patterns
+
+## Database Conventions
+- Follow Rails naming conventions for tables and columns
+- Use foreign keys for referential integrity
+- Create indexes for frequently queried columns
+- Use database constraints where appropriate
+- Consider performance for tenant-spanning queries
+- Use migrations for schema changes
+- Use `audited` for tracking model changes
+
+## Testing Guidelines
+- Write tests with RSpec for all models and controllers
+- Use Factory Bot for test data creation
+- Follow existing patterns for tenant context in tests
+- Test tenant isolation explicitly
+- Use mocks for external services (Phaxio, Twilio)
+- Integration tests with Cypress for critical user flows
+
+## Background Processing
+- Use Resque for background processing
+- Follow existing job class patterns
+- Consider job priority for time-sensitive operations
+- Implement proper error handling
+
