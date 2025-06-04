@@ -12,6 +12,8 @@ RUN apt-get update -qq && \
   fontconfig \
   --fix-missing \
   --no-install-recommends && \
+  echo "deb http://deb.debian.org/debian bullseye contrib" >> /etc/apt/sources.list && \
+  apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y ttf-mscorefonts-installer && \
   gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 ) && \
   fc-cache -f && \

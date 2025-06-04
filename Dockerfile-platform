@@ -6,6 +6,8 @@ RUN apt-get update -qq && \
     fontconfig \
     --fix-missing \
     --no-install-recommends && \
+    echo "deb http://deb.debian.org/debian bullseye contrib" >> /etc/apt/sources.list && \
+    apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y ttf-mscorefonts-installer && \
     apt-get install chrpath libssl-dev libxft-dev -y && \
     apt-get install libfreetype6 libfreetype6-dev -y && \
