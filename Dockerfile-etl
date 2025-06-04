@@ -9,9 +9,13 @@ RUN apt-get update -qq && \
   libpq-dev \
   postgresql-client \
   zip \
+  fontconfig \
   --fix-missing \
   --no-install-recommends && \
-  gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 )
+  DEBIAN_FRONTEND=noninteractive apt-get install -y ttf-mscorefonts-installer && \
+  gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 ) && \
+  fc-cache -f && \
+  rm -rf /var/lib/apt/lists/*
 
 RUN echo "export SCRIPT_ENV=development" >> /root/.bashrc
 

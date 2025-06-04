@@ -2,9 +2,13 @@ FROM ruby:3.0.3
 COPY ./aprexis-engine/Gemfile.lock /tmp/Gemfile.lock.tmp
 RUN apt-get update -qq && \
   apt-get install -y curl git build-essential libpq-dev nodejs libpq-dev postgresql-client zip \
+  fontconfig \
   --fix-missing \
   --no-install-recommends && \
-  gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 )
+  DEBIAN_FRONTEND=noninteractive apt-get install -y ttf-mscorefonts-installer && \
+  gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 ) && \
+  fc-cache -f && \
+  rm -rf /var/lib/apt/lists/*
 
 WORKDIR /aprexis-engine
 RUN mkdir -p /aprexis-engine/lib/aprexis/engine
