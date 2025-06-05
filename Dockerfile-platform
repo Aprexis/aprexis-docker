@@ -3,12 +3,17 @@ FROM ruby:3.0.3
 COPY ./aprexis-platform-5/Gemfile.lock /tmp/Gemfile.lock.tmp
 RUN apt-get update -qq && \
     apt-get install -y curl git build-essential libpq-dev nodejs npm libpq-dev postgresql-client zip \
+    fontconfig \
     --fix-missing \
     --no-install-recommends && \
+    echo "deb http://deb.debian.org/debian bullseye contrib" >> /etc/apt/sources.list && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y ttf-mscorefonts-installer && \
     apt-get install chrpath libssl-dev libxft-dev -y && \
     apt-get install libfreetype6 libfreetype6-dev -y && \
     apt-get install libfontconfig1 libfontconfig1-dev -y && \
-    gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 )
+    gem install bundler -v $(grep 'BUNDLED WITH' -A1 /tmp/Gemfile.lock.tmp | tail -n 1 ) && \
+    fc-cache -f
 
 
 # Install Google Chrome Stable and fonts
