@@ -20,16 +20,12 @@ cp env.example .env
 ```
 #### 2. Create Github access token
 
-Create a classic access token to allow you to pull the aprexis-engine gem from Github. To do this:
+Create a classic access token to allow you to pull the aprexis-engine gem from Github.
 
-1. Log into your account on github.com
-2. Click on your picture (or whatever icon it has to display your account) and select Settings from the pulldown
-3. Click on Developer Settings (at the bottom of the settings pages)
-4. Expand the entry Personal access tokens
-5. Select Tokens (classic)
-6. Click Generate new token
-7. My personal token doesn't expire, but that's because we're currently using it for deploying to the production, staging, and demo machines. It is a pain to deal with expired tokens, so I won't force you to set an expiration, but you can
-8. I haven't tried to figure out what the minimum set of permissions needed is. I know that this set works: admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, delete:packages, delete_repo, gist, repo, user, workflow, write:discussion, write:package
+In your github.com account:
+1. Settings > Developer settings > Personal access tokens > Tokens (classic)
+2. Generate new token (classic)
+3. Select `No expiration` and  `repo` scope
 
 #### 3. Update .env
 
@@ -44,7 +40,9 @@ source .env
 
 #### 4. Get a database dump
 
-Get a `.gz` database dump from S3 or Google drive. It will be named something like `aprexis_anonymized_YYYY-MM-DD.sql.gz`. Put it in the `aprexis-data/database` dir.
+1. Get a DB dump from https://us-west-2.console.aws.amazon.com/s3/buckets/aprexis-anonymized-data-dumps
+2. Put the .gz file in aprexis-data/database/.
+3. Make sure it is the only .gz in that dir
 
 #### 5. (Optional) Modify Gemfiles for local development
 
@@ -71,11 +69,50 @@ make up
 #### 7. Go to the apps
 
 - Platform: http://localhost:3000
+    - user: aprexis-admin@example.com
+    - pass: Passw0rd!
+
 - API UI:  http://localhost:3500
 - API:  http://localhost:3250
 
 
 ## Development
+
+### Overview
+Aprexis uses a Git Flow-based process. There are two long-lived branches - `development` and `master`.
+
+#### 1. Create a feature branch
+
+Create a feature branch off of the `development` branch. The branch name should have the Redmine issue number in the branch name
+
+    Example branch names:
+    - 12345
+    - rm12345
+    - RM12345-my-new-feature
+
+#### 2. Create a github PR
+
+Create PR(s) in the appropriate repository in github to merge your feature branch back into `development`. This can be done any time during the development process. If the PR is not ready for review yet, mark it as a draft, and optionally add a `WIP` label.
+  - The **Title** should start with the Redmine ticket number.
+  - The **Description** should have
+    - Bullet points about what the changes are.
+    - Link to the Redmine ticket.
+    - Screenshots or videos if they are helpful to explain the functionality or changes.
+
+  - In the Redmine issue, add a link to all PRs associated with the issue.
+
+#### 3. Request a code review
+
+When the code is ready for review, request someone to review it using github `Reviewers` feature. Remove the `WIP` label if there is one. Optionally add the `Ready for review` label.
+
+#### 4. Prepare for release
+
+When the review is approved,
+
+ - Merge the PR
+ - In Redmine:
+    - Mark the issue as `Resolved`
+    - Add information about how to QA the feature on the staging server. [Example](https://redmine.bear-code.com/issues/11576#note-4).
 
 ### Updating gems
 
