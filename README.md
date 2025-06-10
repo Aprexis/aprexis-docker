@@ -127,9 +127,21 @@ make migrate_db
 ```
 
 ### Reseting the database
-```bash
-make new_db
-```
+
+Reset your database using a DB dump file.
+
+1. Get a dump file from https://aprexis-anonymized-data-dumps.s3.us-west-2.amazonaws.com/
+2. Put the file in `aprexis-data/database/`
+3. Make sure there is only one dump file in `aprexis-data/database/`
+3. Run `make new_db`
+
+### Creating a DB dump file
+
+Create a dump file, either for backup or to upload to S3.
+
+1. Run `make dump_db`. This can take a while.
+2. Find the new file in `aprexis-data/database/`
+
 
 ## Varieties
 
