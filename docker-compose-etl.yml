@@ -125,7 +125,7 @@ services:
       - ./aprexis-platform-5/storage:/aprexis-api/storage
       - ./aprexis-data:/aprexis-data
       - bundler_gems:/usr/local/bundle
-    command: ./start.sh"
+    command: ./start.sh
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
